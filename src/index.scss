@@ -1,0 +1,29 @@
+.paying-attention-edit-block {
+  padding: 20px;
+  border-radius: 2px;
+  border: 1px solid #ae4a84;
+  background-color: #003263;
+  color: blue;
+  .mark-as-correct {
+    color: #ae4a84;
+    position: relative;
+    top: -3px;
+    transition: transform 0.5s ease-in-out;
+
+    &:hover {
+      transform: scale(1.25) rotate(45deg);
+    }
+    .filled-star {
+      background-color: #ae4a84;
+    }
+  }
+  .attention-delate {
+    color: red;
+    position: relative;
+    top: -5px; 
+
+    &:hover{
+      color: #c20000 !important;
+    }
+  }
+}

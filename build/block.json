@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "effective-pluggin/effective-accordation",
+  "version": "0.1.0",
+  "title": "effective-accordation",
+  "category": "Effective Cards",
+  "icon": "testimonial",
+  "description": "mój pierwszy plugin w react",
+  "attributes": {
+    "clicked": {
+      "type": "boolean",
+      "default": "false"
+    },
+    "AccordationDate": {
+      "type": "array",
+      "default": [
+        {
+          "title": "Find relevant media contacts - multiline title",
+          "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.",
+          "imageUrl": "http://effectivewebsite.local/wp-content/uploads/2022/09/P1015596-scaled.jpeg",
+          "baseColor": "249,82,120",
+          "secondColor": "221,9,57"
+        },
+        {
+          "title": "Another amazing feature",
+          "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.",
+          "imageUrl": "http://effectivewebsite.local/wp-content/uploads/2022/09/sports-tools-scaled.jpg",
+          "baseColor": "57,148,224",
+          "secondColor": "99,172,232"
+        },
+        {
+          "title": "And yet... another truly fascinating feature",
+          "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.",
+          "imageUrl": "http://effectivewebsite.local/wp-content/uploads/2022/09/tlotlot.jpg",
+          "baseColor": "88,193,132",
+          "secondColor": "124,207,158"
+        }
+      ]
+    },
+    "currentTab": {
+      "type": "number",
+      "default": 0
+    },
+    "backgroundColorFront": {
+      "type": "string"
+    },
+    "backgroundColorBack": {
+      "type": "string"
+    },
+    "background": {
+      "type": "string"
+    },
+    "titleColor": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "footer": {
+      "type": "string"
+    }
+  },
+  "editorScript": "file:./build/index.js",
+  "editorStyle": "file:./build/index.css",
+  "style": "file:./build/style-index.css"
+}
