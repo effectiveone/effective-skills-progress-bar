@@ -16,64 +16,41 @@
 			"type": "array",
 			"default": [
 				{
-					"title": "Find relevant media contacts - multiline title",
+					"title":  "Find relevant media contacts - multiline title",
 					"description":
 					  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.",
-					"imageUrl": "http://effectivewebsite.local/wp-content/uploads/2022/09/P1015596-scaled.jpeg",
-					"baseColor": "249,82,120",
-					"secondColor": "221,9,57"
+					"imageUrl": "https://gruca.j.pl/wp-content/uploads/2022/09/laptop-gfebac6206_640.webp",
+					"baseColor": "#947979",
+					"titleColor": "#FFFFFF",
+					"secondColor": "#645252",
+					"descColor": "#000",
+					"stateOpen": "true"
 				  },
 				  {
-					"title": "Another amazing feature",
+					"title":  "Another amazing feature",
+				  
 					"description":
 					  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.",
-					"imageUrl": "http://effectivewebsite.local/wp-content/uploads/2022/09/sports-tools-scaled.jpg",
-					"baseColor": "57,148,224",
-					"secondColor": "99,172,232"
+					"imageUrl": "https://gruca.j.pl/wp-content/uploads/2022/09/wordpress-g9cfa89648_640.webp",
+					"baseColor": "#947979",
+					"titleColor": "#FFFFFF",
+					"secondColor": "#645252",
+					"descColor": "#000",
+					"stateOpen": "false"
+
 				  },
 				  {
-					"title": "And yet... another truly fascinating feature",
+					"title": "yet... another truly fascinating feature",
 					"description":
 					  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.",
-					"imageUrl": "http://effectivewebsite.local/wp-content/uploads/2022/09/tlotlot.jpg",
-					"baseColor": "88,193,132",
-					"secondColor": "124,207,158"
+					"imageUrl": "https://gruca.j.pl/wp-content/uploads/2022/09/blogging-gaaa8db9db_640.webp",
+					"baseColor": "#947979",
+					"titleColor": "#FFFFFF",
+					"secondColor": "#645252",
+					"descColor": "#000",
+					"stateOpen": "false"
 				  }]
 			
-		},
-		"currentTab": {
-			"type": "number",
-			"default": 0
-		},
-			"backgroundColorFront": {
-			"type": "string"
-		},
-		"backgroundColorBack": {
-			"type": "string"
-		},
-		"background": {
-			"type": "string"
-		},
-		"titleColor": {
-			"type": "string"
-		},
-		"image": {
-			"type": "string"
-		},
-		"title": {
-			"type": "string"
-		},
-		"bgColor": {
-			"type": "string"},
-		"content": {
-			"type": "string"
-        },
-		"footer": {
-			"type": "string"
 		}
-	},
-
-	"editorScript": "file:./build/index.js",
-	"editorStyle": "file:./build/index.css",
-	"style": "file:./build/style-index.css"
+	}
 }

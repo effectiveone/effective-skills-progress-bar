@@ -1,29 +1,24 @@
-import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
+import {TextControl, TextareaControl, Flex, FlexBlock, FlexItem, Panel,  Button, Icon, PanelBody, PanelRow, ColorPalette} from "@wordpress/components"
 import {InspectorControls, BlockControls, AlignmentToolbar} from "@wordpress/block-editor"
-import {ChromePicker} from "react-color"
+import { more } from '@wordpress/icons';
+import {ChromePicker, TwitterPicker} from "react-color"
 import { __ } from "@wordpress/i18n";
 import { useBlockProps } from "@wordpress/block-editor";
 import styled from 'styled-components';
-
+import { Fragment } from '@wordpress/element';
 
 
 const FeaturesGalleryWrapper = styled.div`
-display: flex;
-/* align-items: center; */
-flex-direction: column;
-/* justify-content: center; */
-position: relative;
-  /* max-width: 130em;
-  width: 100%; */
-  margin: 0 auto;
-  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  grid-auto-rows: 100px;
+
 `;
 
 const GalleryWrapper = styled.div`
-display: flex;
-align-items: flex-start;
-margin-top: 4rem;
-flex-direction: column;
+
+background-color: "red";
 `;
 
 
@@ -40,10 +35,7 @@ margin-right: 4rem;
 const AccordionSection = styled.div`
   display: flex;
   flex-direction: row;
-  /* align-items: center;
-  justify-content: center; */
-  /* position: relative;
-  height: 100vh; */
+  position: relative;
   background: #fff;
 `;
 
@@ -80,6 +72,7 @@ const Dropdown = styled.div`
   color: #00ffb9;
   width: 100%;
   height: 100px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -94,12 +87,6 @@ const Dropdown = styled.div`
 function Edit(props) {
   const {
 		attributes: {
-			background,
-			titleColor,
-			content,
-			title,
-			bgColor,
-      currentTab,
       AccordationDate,
       clicked
 		},
@@ -113,9 +100,6 @@ function Edit(props) {
 		setAttributes({ title: event.target.value });
 	};
 
-  function handleTabClick(idx) {
-    setAttributes({ currentTab: idx});
-  }
 
   const toggle = index => {
     if (clicked === index) {
@@ -125,120 +109,195 @@ function Edit(props) {
   };
 
   function updateTitle(event, ind) {
-    // var func = JSON.parse(JSON.stringify(attributes.AccordationDate));
-    // AccordationDate[ind].title = event.target.value;
 return (
-prev => (
-  setAttributes({AccordationDate: [...prev, {
-  ...prev,
- AccordationDate[ind].title: event.target.value }] } )))
+  setAttributes({
+ ...AccordationDate[ind].title = event }))
 }
 
+
+function updateDescription(event, ind) {
+  return (
+    setAttributes({
+   ...AccordationDate[ind].description = event }))
+  }
+
+
+  function updateImage(event, ind) {
+    return (
+      setAttributes({
+     ...AccordationDate[ind].imageUrl = event }))
+    }
+
+
+  function updateBaseColor(event, ind) {
+    return (
+      setAttributes({
+     ...AccordationDate[ind].baseColor = event.hex }))
+    }
+
+    function updateTitleColor(event, ind) {
+      return (
+        setAttributes({
+       ...AccordationDate[ind].titleColor = event.hex }))
+      }
+
+      function updateDescColor(event, ind) {
+        return (
+          setAttributes({
+         ...AccordationDate[ind].descColor = event.hex }))
+        }
+
+    function updateSecondColor(event, ind) {
+      return (
+        setAttributes({
+       ...AccordationDate[ind].secondColor = event.hex }))
+      }
+
+
+      function toggleState(ind) {
+        return (
+          setAttributes(( previousState ) => ( {
+         ...AccordationDate[ind].stateOpen = ! previousState[ind].stateOpen })))
+        }
+
+const addNewAttribute = () => {
+let newAccordationDate = [...AccordationDate]
+newAccordationDate.push({
+    title: "New Row",
+    description: "New Description",
+    imageUrl: "",
+    baseColor: "",
+    secondColor: ""
+  })
+
+  return(
+  setAttributes({AccordationDate: newAccordationDate
+})
+  )
+}
+
+function deleteRow (indexToDelate){
+  const newAnswers = AccordationDate.filter(function(x, index){
+return index != indexToDelate
+  })
+  props.setAttributes({AccordationDate: newAnswers})
+ }
 
 
   return (
     <div {...blockProps}>
+    
     <InspectorControls>
+
       <div id="gutenpride-controls">
+
+    
+
+      <Panel header="Accordation Date">
+      <Button variant="primary" onClick={ addNewAttribute}>Add new items</Button>
+
+
 {AccordationDate.map((param, ind)=>{
   return(
-    <>
-    <input value={param.title} onChange={(event) => updateTitle(event, ind)}
+    <Fragment key={ind}>
+      <PanelBody title={param.title} icon={ more } initialOpen={ true }
+              onToggle={ () => toggleState(ind) } style={{paddingBottom: "20px"}}
+      >
+       <div style={{paddingBottom: "50px"}}></div>
+    <TextControl label="Title" type="string" value={param.title} onChange={(event) => updateTitle(event, ind)}
   />
-    </>
+  <TextareaControl label="Description:" value={param.description} onChange={(event) => updateDescription(event, ind)}
+  />
+  <TextControl label="Image Url:" type="url" value={param.imageUrl} onChange={(event) => updateImage(event, ind)}
+  /><br/>
+Title's background color 
+<TwitterPicker
+              color={param.baseColor}
+              onChangeComplete={(event) => updateBaseColor(event, ind)
+              }
+              disableAlpha={false}
+            />
+
+ Color of title's font 
+<TwitterPicker
+              color={param.titleColor}
+              onChangeComplete={(event) => updateTitleColor(event, ind)
+              }
+              disableAlpha={false}
+            />
+  <br/>
+  Description's background color
+  <TwitterPicker
+              color={param.secondColor}
+              onChangeComplete={(event) => updateSecondColor(event, ind)
+              }
+              disableAlpha={false}
+            />
+  <br/>
+ Color of description font
+  <TwitterPicker
+              color={param.descColor}
+              onChangeComplete={(event) => updateDescColor(event, ind)
+              }
+              disableAlpha={false}
+            />
+  <br/>
+  <Button isSmall variant="secondary" onClick={()=> deleteRow(ind)}>Delete</Button>
+  </PanelBody> 
+<div style={{paddingBottom: "50px"}}></div>
+    </Fragment>
   )
 })}
+</Panel>
 
 
-
-
-
-      <fieldset>
-          <legend className="blocks-base-control__label">
-            {__("Background color", "gutenpride")}
-          </legend>
-          <PanelBody
-            tittle="Front: background, color, title"
-            initialOpen={true}
-          >
-
-            Kolor tła{" "}
-            <ChromePicker
-              color={background}
-              onChangeComplete={(x) =>
-                props.setAttributes({ background: x.hex })
-              }
-              disableAlpha={false}
-            />
-                        </PanelBody>
-
-    </fieldset>
-        <fieldset>
-          <legend className="blocks-base-control__label">
-            {__("Background color", "gutenpride")}
-          </legend>
-          <PanelBody
-            tittle="Front: background, color, title"
-            initialOpen={true}
-          >
-
-            Kolor tytułu{" "}
-            <ChromePicker
-              color={titleColor}
-              onChangeComplete={(x) =>
-                props.setAttributes({ titleColor: x.hex })
-              }
-              disableAlpha={false}
-            />
-            tytuł <input onChange={onChangeTitle} value={title} />
-          </PanelBody>
-        </fieldset>
-        <fieldset>
-          <legend className="blocks-base-control__label">
-            {__("Card Content: Color i content", "gutenpride")}
-          </legend>
-          <PanelBody tittle="Background Color" initialOpen={true}>
-
-            Kolor opisu{" "}
-            <ChromePicker
-              color={bgColor}
-              onChangeComplete={(x) =>
-                props.setAttributes({ bgColor: x.hex })
-              }
-              disableAlpha={true}
-            />
-            Opis <input onChange={onChangeContent} value={content} />
-          </PanelBody>
-        </fieldset>
       </div>
     </InspectorControls>
     
 
-    <FeaturesGalleryWrapper>
-    <GalleryWrapper>
+    <FeaturesGalleryWrapper >
+        <div >
       <TabsContainer><AccordionSection>
   <Containers>
 {AccordationDate.map((data, index)=> {
-return(
+return (
   <>
-  <Wrap onClick={() => toggle(index)} key={index}>
-    <h1 style={{fontSize: "16px"}}>{data.title}</h1>
-  </Wrap>
-  {clicked === index ? (
-    <Dropdown >
-      <p style={{fontSize: "14px"}}>{data.description}</p>
-    </Dropdown>
-  ) : null}
-</>)})}
+    <Wrap
+      onClick={() => toggle(index)}
+      key={index}
+      style={{ backgroundColor: `${data.baseColor}` }}
+    >
+      <h1 style={{ fontSize: "16px", color: `${data.titleColor}` }}>
+        {data.title}
+      </h1>
+    </Wrap>
+    {clicked === index ? (
+      <Dropdown style={{ backgroundColor: `${data.secondColor}` }}>
+        <p
+          style={{
+            fontSize: "14px",
+            paddingLeft: "15px",
+            paddingRight: "15px",
+            paddingTop: "15px",
+            paddingBottom: "15px",
+            color: `${data.descColor}`,
+          }}
+        >
+          {data.description}
+        </p>
+      </Dropdown>
+    ) : null}
+  </>
+);})}
  </Containers>
-</AccordionSection></TabsContainer>
+</AccordionSection></TabsContainer></div>
+<div >
 {AccordationDate.map((data, index)=> {
   return(
     <>
        {clicked === index ? (
-    <img src={data.imageUrl} width="100px" height="200px" />  ) : null}
-    </>)})}
-    </GalleryWrapper>
+    <img src={data.imageUrl} width="300px" height="600px"  />  ) : null}
+    </>)})}</div>
   </FeaturesGalleryWrapper>
 
    

@@ -22,24 +22,71 @@ class EffectiveAccordation {
     register_block_type('effective-pluggin/effective-accordation', array(
       'editor_script' => 'effective-accordation-script',
       'editor_style' => 'effective-accordation-style',
-      'render_callback' => array($this, 'theHTML')
+      'render_callback' => array($this, 'effectiveaccordationfunction')
     ));
   }
 
-  function theHTML($attributes) {
-    if(!is_admin()){
-    wp_enqueue_script( 'attentionFrontend', plugin_dir_url(__FILE__) . 'build/frontend.js', array(
-      'wp-element'
-    ) );
-    wp_enqueue_style('attentionFrontendStyles', plugin_dir_url(__FILE__) . 'build/frontend.css');
-      }  ob_start(); ?>
+  function effectiveaccordationfunction($blockattributes, $content) {
+if (!is_admin()) {
+      wp_enqueue_script('boilerplateFrontendScript', plugin_dir_url(__FILE__) . 'build/frontend.js', array('wp-element'), '1.0.0', true );
+      wp_enqueue_style('boilerplateFrontendStyles', plugin_dir_url(__FILE__) . 'build/frontend.css');
+    
+if(isset($blockattributes['AccordationDate'])){
+  $attribute = $blockattributes['AccordationDate'];
+} else {
+  $attribute =  [
+      [
+        'title' =>  'Find relevant media contacts - multiline title',
+        'description' =>
+          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.',
+        'imageUrl' => 'https://gruca.j.pl/wp-content/uploads/2022/09/laptop-gfebac6206_640.webp',
+        'baseColor' => '#947979',
+        'titleColor' => '#FFFFFF',
+        'secondColor' => '#645252',
+        'descColor' => '#000',
+        'stateOpen' => true
+      ],
+        [
+        'title' =>  'Another amazing feature',
+        
+        'description' =>
+          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.',
+        'imageUrl' => 'https://gruca.j.pl/wp-content/uploads/2022/09/wordpress-g9cfa89648_640.webp',
+        'baseColor' => '#947979',
+        'titleColor' => '#FFFFFF',
+        'secondColor' => '#645252',
+        'descColor' => '#000',
+        'stateOpen' => false
 
-<div class="paying-attention-update-me"><pre style="display: none;"><?php echo wp_json_encode($attributes) ?></pre></div>
+        ],
+        [
+        'title' => 'yet... another truly fascinating feature',
+        'description' =>
+          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem ipsam ratione dicta quis cupiditate consequuntur laborum ducimus iusto velit.',
+        'imageUrl' => 'https://gruca.j.pl/wp-content/uploads/2022/09/blogging-gaaa8db9db_640.webp',
+        'baseColor' => '#947979',
+        'titleColor' => '#FFFFFF',
+        'secondColor' => '#645252',
+        'descColor' => '#000',
+        'stateOpen' => false
+        ]];
+}   
+    }
 
-<?php return ob_get_clean();
+
+
+    
+    ob_start(); ?>
+<div  class="effective-attention-update-me">
+<pre style="display: block;"><?php echo wp_json_encode($attribute) ?></pre>
+ </div> 
+     <?php return ob_get_clean();
+    
   }
+
 }
 
 
 
 $EffectiveAccordation = new EffectiveAccordation();
+
