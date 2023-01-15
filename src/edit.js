@@ -1,309 +1,197 @@
-import {TextControl, TextareaControl, Flex, FlexBlock, FlexItem, Panel,  Button, Icon, PanelBody, PanelRow, ColorPalette} from "@wordpress/components"
-import {InspectorControls, BlockControls, AlignmentToolbar} from "@wordpress/block-editor"
-import { more } from '@wordpress/icons';
-import {ChromePicker, TwitterPicker} from "react-color"
+import {
+  TextControl,
+  RangeControl,
+  Panel,
+  Button,
+  PanelBody,
+} from "@wordpress/components";
+import { InspectorControls } from "@wordpress/block-editor";
+import { more } from "@wordpress/icons";
 import { __ } from "@wordpress/i18n";
 import { useBlockProps } from "@wordpress/block-editor";
-import styled from 'styled-components';
-import { Fragment } from '@wordpress/element';
-
-
-const FeaturesGalleryWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  grid-auto-rows: 100px;
-
-`;
-
-const GalleryWrapper = styled.div`
-
-background-color: "red";
-`;
-
-
-const TabsContainer = styled.div`
-flex: 1;
-margin-right: 4rem;
-
-& > *:not(:first-child) {
-  margin-top: 2rem;
-}
-`;
-
-
-const AccordionSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  background: #fff;
-`;
-
-
-
-
-
-const Containers = styled.div`
-  position: absolute;
-  top: 100%;
-  box-shadow: 2px 10px 35px 1px rgba(153, 153, 153, 0.3);
-`;
-
-const Wrap = styled.div`
-  background: #272727;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  text-align: center;
-  cursor: pointer;
-  h1 {
-    padding: 2rem;
-    font-size: 16px;
-  }
-  span {
-    margin-right: 1.5rem;
-  }
-`;
-
-const Dropdown = styled.div`
-  background: #1c1c1c;
-  color: #00ffb9;
-  width: 100%;
-  height: 100px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid #00ffb9;
-  border-top: 1px solid #00ffb9;
-  p {
-    font-size: 14px;
-  }
-`;
+import { Fragment } from "@wordpress/element";
 
 function Edit(props) {
   const {
-		attributes: {
-      AccordationDate,
-      clicked
-		},
-		setAttributes,
-	} = props;
-	const blockProps = useBlockProps();
-	const onChangeContent = (event) => {
-		setAttributes({ content: event.target.value });
-	};
-	const onChangeTitle = (event) => {
-		setAttributes({ title: event.target.value });
-	};
-
-
-  const toggle = index => {
-    if (clicked === index) {
-      return  setAttributes({ clicked: null})
-    }
-    setAttributes({ clicked: index})
-  };
+    attributes: { AccordationDate, clicked, columns },
+    setAttributes,
+  } = props;
+  const blockProps = useBlockProps();
 
   function updateTitle(event, ind) {
-return (
-  setAttributes({
- ...AccordationDate[ind].title = event }))
-}
-
-
-function updateDescription(event, ind) {
-  return (
-    setAttributes({
-   ...AccordationDate[ind].description = event }))
+    return setAttributes({
+      ...(AccordationDate[ind].title = event),
+    });
   }
 
+  function updateSkills(event, ind) {
+    return setAttributes({
+      ...(AccordationDate[ind].skills = event),
+    });
+  }
 
-  function updateImage(event, ind) {
-    return (
-      setAttributes({
-     ...AccordationDate[ind].imageUrl = event }))
+  function toggleState(ind) {
+    return setAttributes((previousState) => ({
+      ...(AccordationDate[ind].stateOpen = !previousState[ind].stateOpen),
+    }));
+  }
+
+  const addNewAttribute = () => {
+    let newAccordationDate = [...AccordationDate];
+    newAccordationDate.push({
+      title: "New Row",
+      skills: 0,
+    });
+
+    return setAttributes({ AccordationDate: newAccordationDate });
+  };
+
+  function deleteRow(indexToDelate) {
+    const newAnswers = AccordationDate.filter(function (x, index) {
+      return index != indexToDelate;
+    });
+    props.setAttributes({ AccordationDate: newAnswers });
+  }
+
+  function getRandomColor() {
+    var letters = "0123456789ABCDEF";
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
+    return color;
+  }
 
-
-  function updateBaseColor(event, ind) {
-    return (
-      setAttributes({
-     ...AccordationDate[ind].baseColor = event.hex }))
+  function determineSkillLevel(value) {
+    if (value < 20) {
+      return "Noob";
+    } else if (value < 40) {
+      return "Beginner";
+    } else if (value < 60) {
+      return "Intermediate";
+    } else if (value < 80) {
+      return "Advanced";
+    } else {
+      return "Expert";
     }
+  }
 
-    function updateTitleColor(event, ind) {
-      return (
-        setAttributes({
-       ...AccordationDate[ind].titleColor = event.hex }))
-      }
+  const SkillLevel = (props) => {
+    const value = props * 10;
+    const level = determineSkillLevel(value);
+    return (
+      <>
+        {level}({value}%)
+      </>
+    );
+  };
 
-      function updateDescColor(event, ind) {
-        return (
-          setAttributes({
-         ...AccordationDate[ind].descColor = event.hex }))
-        }
+  const displayProgressBar = AccordationDate.map((skills) => {
+    const randomBackgroundColor = getRandomColor();
+    const containerStyles = {
+      width: "100%",
+      height: "20px",
+      backgroundColor: "lightgray",
+      borderRadius: "5px",
+      border: "2px solid green",
+      position: "relative",
+      marginBottom: "20px",
+    };
 
-    function updateSecondColor(event, ind) {
-      return (
-        setAttributes({
-       ...AccordationDate[ind].secondColor = event.hex }))
-      }
+    const barStyles = {
+      width: skills.skills * 10 + "%",
+      height: "100%",
+      backgroundColor: randomBackgroundColor,
+      borderRadius: "5px",
+      transition: "width 0.5s ease-in-out",
+    };
 
+    const restStyles = {
+      width: 100 - skills.skills * 10 + "%",
+      height: "100%",
+      backgroundColor: "white",
+      borderRadius: "5px",
+      position: "absolute",
+      top: "0",
+      right: "0",
+    };
 
-      function toggleState(ind) {
-        return (
-          setAttributes(( previousState ) => ( {
-         ...AccordationDate[ind].stateOpen = ! previousState[ind].stateOpen })))
-        }
-
-const addNewAttribute = () => {
-let newAccordationDate = [...AccordationDate]
-newAccordationDate.push({
-    title: "New Row",
-    description: "New Description",
-    imageUrl: "",
-    baseColor: "",
-    secondColor: ""
-  })
-
-  return(
-  setAttributes({AccordationDate: newAccordationDate
-})
-  )
-}
-
-function deleteRow (indexToDelate){
-  const newAnswers = AccordationDate.filter(function(x, index){
-return index != indexToDelate
-  })
-  props.setAttributes({AccordationDate: newAnswers})
- }
-
+    return (
+      <div style={containerStyles} key={skills.title}>
+        <em
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "50%",
+            transform: "translate(-50%, 0)",
+            zIndex: 2,
+          }}
+        >
+          {skills.title}
+        </em>
+        <div style={barStyles}> </div>
+        <div style={restStyles}>
+          {" "}
+          <p style={{ position: "absolute", right: "10px", top: "0" }}>
+            {SkillLevel(skills.skills)}
+          </p>
+        </div>
+      </div>
+    );
+  });
 
   return (
     <div {...blockProps}>
-    
-    <InspectorControls>
+      <InspectorControls>
+        <div id="gutenpride-controls">
+          <Panel header="Accordation Date">
+            <Button variant="primary" onClick={addNewAttribute}>
+              Add new items
+            </Button>
 
-      <div id="gutenpride-controls">
+            {AccordationDate.map((param, ind) => {
+              return (
+                <Fragment key={ind}>
+                  <PanelBody
+                    title={param.title}
+                    icon={more}
+                    initialOpen={true}
+                    onToggle={() => toggleState(ind)}
+                    style={{ paddingBottom: "20px" }}
+                  >
+                    <div style={{ paddingBottom: "50px" }}></div>
+                    <TextControl
+                      label="Title"
+                      type="string"
+                      value={param.title}
+                      onChange={(event) => updateTitle(event, ind)}
+                    />
+                    <RangeControl
+                      label="Columns"
+                      value={param.skills}
+                      onChange={(event) => updateSkills(event, ind)}
+                      min={0}
+                      max={10}
+                    />
+                    <Button
+                      isSmall
+                      variant="secondary"
+                      onClick={() => deleteRow(ind)}
+                    >
+                      Delete
+                    </Button>
+                  </PanelBody>
+                  <div style={{ paddingBottom: "50px" }}></div>
+                </Fragment>
+              );
+            })}
+          </Panel>
+        </div>
+      </InspectorControls>
 
-    
+      {displayProgressBar}
+    </div>
+  );
+}
 
-      <Panel header="Accordation Date">
-      <Button variant="primary" onClick={ addNewAttribute}>Add new items</Button>
-
-
-{AccordationDate.map((param, ind)=>{
-  return(
-    <Fragment key={ind}>
-      <PanelBody title={param.title} icon={ more } initialOpen={ true }
-              onToggle={ () => toggleState(ind) } style={{paddingBottom: "20px"}}
-      >
-       <div style={{paddingBottom: "50px"}}></div>
-    <TextControl label="Title" type="string" value={param.title} onChange={(event) => updateTitle(event, ind)}
-  />
-  <TextareaControl label="Description:" value={param.description} onChange={(event) => updateDescription(event, ind)}
-  />
-  <TextControl label="Image Url:" type="url" value={param.imageUrl} onChange={(event) => updateImage(event, ind)}
-  /><br/>
-Title's background color 
-<TwitterPicker
-              color={param.baseColor}
-              onChangeComplete={(event) => updateBaseColor(event, ind)
-              }
-              disableAlpha={false}
-            />
-
- Color of title's font 
-<TwitterPicker
-              color={param.titleColor}
-              onChangeComplete={(event) => updateTitleColor(event, ind)
-              }
-              disableAlpha={false}
-            />
-  <br/>
-  Description's background color
-  <TwitterPicker
-              color={param.secondColor}
-              onChangeComplete={(event) => updateSecondColor(event, ind)
-              }
-              disableAlpha={false}
-            />
-  <br/>
- Color of description font
-  <TwitterPicker
-              color={param.descColor}
-              onChangeComplete={(event) => updateDescColor(event, ind)
-              }
-              disableAlpha={false}
-            />
-  <br/>
-  <Button isSmall variant="secondary" onClick={()=> deleteRow(ind)}>Delete</Button>
-  </PanelBody> 
-<div style={{paddingBottom: "50px"}}></div>
-    </Fragment>
-  )
-})}
-</Panel>
-
-
-      </div>
-    </InspectorControls>
-    
-
-    <FeaturesGalleryWrapper >
-        <div >
-      <TabsContainer><AccordionSection>
-  <Containers>
-{AccordationDate.map((data, index)=> {
-return (
-  <>
-    <Wrap
-      onClick={() => toggle(index)}
-      key={index}
-      style={{ backgroundColor: `${data.baseColor}` }}
-    >
-      <h1 style={{ fontSize: "16px", color: `${data.titleColor}` }}>
-        {data.title}
-      </h1>
-    </Wrap>
-    {clicked === index ? (
-      <Dropdown style={{ backgroundColor: `${data.secondColor}` }}>
-        <p
-          style={{
-            fontSize: "14px",
-            paddingLeft: "15px",
-            paddingRight: "15px",
-            paddingTop: "15px",
-            paddingBottom: "15px",
-            color: `${data.descColor}`,
-          }}
-        >
-          {data.description}
-        </p>
-      </Dropdown>
-    ) : null}
-  </>
-);})}
- </Containers>
-</AccordionSection></TabsContainer></div>
-<div >
-{AccordationDate.map((data, index)=> {
-  return(
-    <>
-       {clicked === index ? (
-    <img src={data.imageUrl} width="300px" height="600px"  />  ) : null}
-    </>)})}</div>
-  </FeaturesGalleryWrapper>
-
-   
- </div>
-)}
-
-
-export default Edit
-
+export default Edit;

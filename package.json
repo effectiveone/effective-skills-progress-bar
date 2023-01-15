@@ -1,10 +1,10 @@
 {
-  "name": "effective-accordation",
+  "name": "Effective-Percent-Bar",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "build": "wp-scripts build src/frontend.js src/index.js",
+    "build": "wp-scripts build src/frontend.js src/edit.js src/index.js",
     "start": "wp-scripts  start src/frontend.js src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,111 +1,113 @@
-import React, {useState, useEffect} from 'react'
-import ReactDOM from 'react-dom'
-import {ReactHeight} from 'react-height';
-import "./frontend.style.scss"
+import React from "react";
+import { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 
-const divsToUpdate = document.querySelectorAll(".effective-attention-update-me")
+const Frontend = (props) => {
+  const [accordationDate, setAccordationDate] = useState(props.myProp || []);
+  useEffect(() => {
+    const myArray = Object.entries(props).map(([key, value]) => value);
 
-divsToUpdate.forEach(div => {
-  const data = JSON.parse(div.querySelector("pre").innerText)
-    ReactDOM.render(<Frontend {...data} />, div)
-    div.classList.remove("effective-attention-update-me")
-})
+    setAccordationDate(myArray);
+  }, [props.myProp]);
 
-function Frontend(props) {
-  // const {} = attributes;
-  console.log("props", props)
-const [value, setValue] = useState([])
-  const [czlicked, setCzlicked] = useState(0)
-const [childHeight, setChildHeight] = useState()
-const [childHeightImage, setChildHeightImage] = useState()
-const [parentDivHeight, setParentDivHeight] = useState()
-
-useEffect(() => {
- var array4 = Object.values(props);
-  setValue(array4)
-
-}, [props])
-
-useEffect(()=>{
-  console.log("childHeight", childHeight)
-  console.log("childHeightImage", childHeightImage)
-  
-  if(childHeight  > childHeightImage){  setParentDivHeight(childHeight )}
-  else { setParentDivHeight(childHeightImage)}
-  console.log("parentDivHeight", parentDivHeight)
-
-},[childHeight, childHeightImage, parentDivHeight, czlicked])
-
-  const toggle = index => {
-    if (czlicked === index) {
-      return  setCzlicked(null)
+  function getRandomColor() {
+    var letters = "0123456789ABCDEF";
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
-    setCzlicked(index)
+    return color;
+  }
+
+  const SkillLevel = (props) => {
+    const value = props * 10;
+    let level;
+    if (value < 20) {
+      level = "Noob";
+    } else if (value < 40) {
+      level = "Beginner";
+    } else if (value < 60) {
+      level = "Intermediate";
+    } else if (value < 80) {
+      level = "Advanced";
+    } else {
+      level = "Expert";
+    }
+    return (
+      <>
+        {level}({value}%)
+      </>
+    );
   };
-
-
+  console.log("accordationDate", accordationDate);
   return (
-<>  
-       <div className="FeaturesGalleryWrapper" style={{height: parentDivHeight, paddingBottom: "100px"}}>
-         <div >
-      <div className="TabsContainer" ><div className="AccordionSection" >
-  <div className="Containers">
-  <ReactHeight onHeightReady={height => setChildHeight(height)}>
- {value.map((data, index)=> {
-return (
-  <React.Fragment key={index}>
-    <div className="Wrap"
-      onClick={() => toggle(index)}
-      key={index}
-      style={{ backgroundColor: `${data.baseColor}` }}
-    >
-      <h1 style={{ fontSize: "16px", color: `${data.titleColor}` }}>
-        {data.title}
-      </h1>
-    </div>
-    {czlicked === index ? (
-      <div className="Dropdown"
-      
-      style={{ backgroundColor: `${data.secondColor}` }}>
-        <p
-          style={{
-            fontSize: "14px",
-            paddingLeft: "15px",
-            paddingRight: "15px",
-            paddingTop: "15px",
-            paddingBottom: "15px",
-            color: `${data.descColor}`,
-          }}
-        >
-          {data.description}
-        </p>
-      </div>
-    ) : null}
-  </React.Fragment>
-);})}</ReactHeight>
-
- </div>
-</div></div>
-</div>
-<div className="imageWraper">
-<ReactHeight onHeightReady={height => setChildHeightImage(height)}>
-
-{value.map((data, index)=> {
-  return(
     <>
-       {czlicked === index ? (
-      
-       <React.Fragment key={index}>
-    {data?.imageUrl && (  <img src={data?.imageUrl} width="300px" height="600px"  />)}
-</React.Fragment> 
-) : null}
-    </>)})}
-    </ReactHeight>
-    </div>
-  </div> 
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <h2 style={{ color: "red" }}>Moje skille</h2>
+        {accordationDate?.map((skills) => {
+          const randomBackgroundColor = getRandomColor();
+          const containerStyles = {
+            width: "100%",
+            height: "20px",
+            backgroundColor: "lightgray",
+            borderRadius: "5px",
+            border: "2px solid black",
+            position: "relative",
+            marginBottom: "20px",
+          };
 
- </>
-  )
-}
+          const barStyles = {
+            width: skills.skills * 10 + "%",
+            height: "100%",
+            backgroundColor: randomBackgroundColor,
+            borderRadius: "5px",
+            transition: "width 0.5s ease-in-out",
+          };
 
+          const restStyles = {
+            width: 100 - skills.skills * 10 + "%",
+            height: "100%",
+            backgroundColor: "white",
+            borderRadius: "5px",
+            position: "absolute",
+            top: "0",
+            right: "0",
+          };
+          return (
+            <div style={containerStyles} key={skills.title}>
+              <em
+                style={{
+                  position: "absolute",
+                  top: "0",
+                  left: "50%",
+                  transform: "translate(-50%, 0)",
+                  zIndex: 2,
+                }}
+              >
+                {skills.title}
+              </em>
+              <div style={barStyles}> </div>
+              <div style={restStyles}>
+                {" "}
+                <p style={{ position: "absolute", right: "10px", top: "0" }}>
+                  {SkillLevel(skills.skills)}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
 
+const divsToUpdate = document.querySelectorAll(
+  ".effective-progress-bar-update-me"
+);
+
+divsToUpdate?.forEach((div) => {
+  // const data = JSON.parse(div.getAttribute("data-attributes"));
+  const data = JSON.parse(div.querySelector("pre").innerText);
+  ReactDOM.render(<Frontend {...data} />, div);
+  div.classList.remove("effective-progress-bar-update-me");
+});
